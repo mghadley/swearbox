@@ -5,7 +5,7 @@ class CrawlerWorker
 	def perform(user_id)
 		user = User.find_by(user_id: user_id)
 		repos = get_repos(user.github_username)
-		commits = get_commits(repos)
+		commits = get_commits(user.github_username, repos)
 		count_sins(user, commits.flatten.map { |c| c['message'] })
 		file_urls = get_file_urls(commits.map { |c| c.last['tree_url'] })
 		file_contents = get_contents(file_urls)
@@ -27,11 +27,11 @@ class CrawlerWorker
 		return repos
 	end
 
-	def get_commits(repos)
+	def get_commits(username, repos)
 		commits = []
 		repos.each do |repo|
 			repo_commits = []
-			response = HTTParty.get("#{@base_uri}/repos/#{self.name}/#{repo}/commits?#{@credentials}")
+			response = HTTParty.get("#{@base_uri}/repos/#{username}/#{repo}/commits?#{@credentials}")
 			response.each do |commit|
 				repo_commits << { message: commit['commit']['message'], tree_url: commit['commit']['tree']['url'] }
 			end
