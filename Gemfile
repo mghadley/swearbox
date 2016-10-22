@@ -12,10 +12,12 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 2.5'
 
 gem "github_api"
-
+gem 'httparty'
+gem 'multi_xml'
 
 group :development, :test do
   gem 'byebug', platform: :mri
+  gem 'pry'
 end
 
 group :development do
