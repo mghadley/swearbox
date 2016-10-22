@@ -26,27 +26,27 @@ class CrawlerWorker
 	def get_repos(username)
 		repos = []
 		puts "=======================================================================================", "trying to get repos from #{@@base_uri}"
-		response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}&page=2")
+		response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}")
 		puts "=======================================================================================", "got repos"
 		response.each do |repo|
 			repos << { name: repo['name'], ssh_url: repo['ssh_url'] }
 		end
-		# page_count = 1
-		# headers_array = response.headers['link'].split","
-		# hash = Hash[headers_array.map { |el| el.split '; '}]
-		# hash.each do |key, value|
-		# 	if value == "rel=\"last\""
-		# 		page_count = (key.match(/page=(\d+).*$/)[1]).to_i
-		# 	end
-		# end
-		# if page_count > 1
-		# 	(2..page_count).each do |i|
-		# 		paginated_response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}&page=#{i}")
-		# 		paginated_response.each do |repo|
-		# 			repos << { name: repo['name'], ssh_url: repo['ssh_url'] }
-		# 		end
-		# 	end
-		# end
+		page_count = 1
+		headers_array = response.headers['link'].split","
+		hash = Hash[headers_array.map { |el| el.split '; '}]
+		hash.each do |key, value|
+			if value == "rel=\"last\""
+				page_count = (key.match(/page=(\d+).*$/)[1]).to_i
+			end
+		end
+		if page_count > 1
+			(2..page_count).each do |i|
+				paginated_response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}&page=#{i}")
+				paginated_response.each do |repo|
+					repos << { name: repo['name'], ssh_url: repo['ssh_url'] }
+				end
+			end
+		end
 		return repos
 	end
 
