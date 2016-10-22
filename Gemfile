@@ -14,6 +14,7 @@ gem 'jbuilder', '~> 2.5'
 gem "github_api"
 gem 'httparty'
 gem 'multi_xml'
+gem 'sidekiq'
 
 group :development, :test do
   gem 'byebug', platform: :mri
