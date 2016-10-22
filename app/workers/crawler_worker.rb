@@ -14,9 +14,9 @@ class CrawlerWorker
 		# file_urls = get_file_urls(commits.map { |c| c.last[:tree_url] })
 		# file_contents = get_contents(file_urls)
 		repos.each do |repo|
-			path = [Rails.root, "/tmp/#{user.github_username}/#{repo[:name]}/"].join
+			path = [Rails.root, "/tmp/#{user.github_username}-#{repo[:name]}/"].join
 			`git clone #{repo[:ssh_url]} #{path}`
-			count_code_sins(path)
+			count_code_sins(user, path)
 			`rm -rf #{path}`
 		end
 	end
@@ -26,11 +26,27 @@ class CrawlerWorker
 	def get_repos(username)
 		repos = []
 		puts "=======================================================================================", "trying to get repos from #{@@base_uri}"
-		response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}")
+		response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}&page=2")
 		puts "=======================================================================================", "got repos"
 		response.each do |repo|
 			repos << { name: repo['name'], ssh_url: repo['ssh_url'] }
 		end
+		# page_count = 1
+		# headers_array = response.headers['link'].split","
+		# hash = Hash[headers_array.map { |el| el.split '; '}]
+		# hash.each do |key, value|
+		# 	if value == "rel=\"last\""
+		# 		page_count = (key.match(/page=(\d+).*$/)[1]).to_i
+		# 	end
+		# end
+		# if page_count > 1
+		# 	(2..page_count).each do |i|
+		# 		paginated_response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}&page=#{i}")
+		# 		paginated_response.each do |repo|
+		# 			repos << { name: repo['name'], ssh_url: repo['ssh_url'] }
+		# 		end
+		# 	end
+		# end
 		return repos
 	end
 
@@ -103,8 +119,17 @@ class CrawlerWorker
 		Base64.decode64(string)
 	end
 
-	def count_code_sins(path)
+	def count_code_sins(user, path)
 		puts "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", "counting sins for #{path}"
+		Swearword.all.each do |sw|
+			count = (`egrep -irI "\\b#{sw.word}\\b" #{path} | wc -l`).to_i
+			puts("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", "There are #{count} #{sw.word}") if count > 0
+			if count > 0
+				sin = Sin.find_or_initialize_by(user_id: user.id, swearword_id: sw.id)
+				sin.count += count
+				sin.save
+			end
+		end
 	end
 
 	def count_sins(user, strings)
@@ -113,8 +138,8 @@ class CrawlerWorker
 		regex_hashes.each do |hash|
 			strings.each do |string|
 				count = string.scan(hash[:regex]).length
-				sin = Sin.find_or_initialize_by(user_id: user.id, swearword_id: hash[:id])
 				if count > 0
+					sin = Sin.find_or_initialize_by(user_id: user.id, swearword_id: hash[:id])
 					sin.count += count
 					sin.save
 				end
