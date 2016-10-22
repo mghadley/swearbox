@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+	require 'sidekiq/web'
+	mount Sidekiq::Web => '/sidekiq'
+	
   get 'pages/score_board'
 
   get 'auth/developer', as: 'developer_auth'

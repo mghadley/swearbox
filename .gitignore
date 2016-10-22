@@ -13,6 +13,7 @@
 !/log/.keep
 !/tmp/.keep
 config/github.yml
+dump.rdb
 
 # Ignore Byebug command history file.
 .byebug_history

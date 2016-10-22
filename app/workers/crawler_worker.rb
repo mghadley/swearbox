@@ -2,36 +2,58 @@ class CrawlerWorker
 	include Sidekiq::Worker
 	require 'base64'
 
+
 	def perform(user_id)
-		user = User.find_by(user_id: user_id)
+		@@base_uri = "https://api.github.com"
+		@@credentials = "client_id=#{ENV['GITHUB_CLIENT_ID']}&client_secret=#{ENV['GITHUB_CLIENT_SECRET']}"
+		user = User.find_by(id: user_id)
+		puts "******************************************************************************************", user
 		repos = get_repos(user.github_username)
-		commits = get_commits(user.github_username, repos)
-		count_sins(user, commits.flatten.map { |c| c['message'] })
-		file_urls = get_file_urls(commits.map { |c| c.last['tree_url'] })
-		file_contents = get_contents(file_urls)
-		count_sins(user, file_contents)
+		commits = get_commits(user.github_username, repos.map { |r| r[:name] })
+		count_sins(user, commits.flatten.map { |c| c[:message] })
+		# file_urls = get_file_urls(commits.map { |c| c.last[:tree_url] })
+		# file_contents = get_contents(file_urls)
+		repos.each do |repo|
+			path = [Rails.root, "/tmp/#{user.github_username}/#{repo[:name]}/"].join
+			`git clone #{repo[:ssh_url]} #{path}`
+			count_code_sins(path)
+			`rm -rf #{path}`
+		end
 	end
 
 	private
 
-	@base_uri = "https://api.github.com"
-	@credentials = "client_id=#{ENV[:GITHUB_CLIENT_ID]}&client_secret=#{ENV[:GITHUB_CLIENT_SECRET]}"
-
 	def get_repos(username)
 		repos = []
-		# TODO change to dynamic usernames
-		response = HTTParty.get("#{@base_uri}/users/#{username}/repos?#{@credentials}")
+		puts "=======================================================================================", "trying to get repos from #{@@base_uri}"
+		response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}")
+		puts "=======================================================================================", "got repos"
 		response.each do |repo|
-			repos << repo['name']
+			repos << { name: repo['name'], ssh_url: repo['ssh_url'] }
 		end
 		return repos
 	end
 
+	# def get_repos_ssh(username)
+	# 	repos = []
+	# 	# TODO change to dynamic usernames
+	# 	puts "=======================================================================================", "trying to get repos from #{@@base_uri}"
+	# 	response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}")
+	# 	puts "=======================================================================================", "got repos"
+	# 	response.each do |repo|
+	# 		repos << repo['name']
+	# 	end
+	# 	puts repos
+	# 	return repos
+	# end
+
 	def get_commits(username, repos)
 		commits = []
+		puts "=======================================================================================", "trying to get commits from #{@@base_uri}"
 		repos.each do |repo|
 			repo_commits = []
-			response = HTTParty.get("#{@base_uri}/repos/#{username}/#{repo}/commits?#{@credentials}")
+			puts "=======================================================================================", "making call to #{@@base_uri}/repos/#{username}/#{repo}/commits?#{@@credentials} to get commits for repo"
+			response = HTTParty.get("#{@@base_uri}/repos/#{username}/#{repo}/commits?#{@@credentials}")
 			response.each do |commit|
 				repo_commits << { message: commit['commit']['message'], tree_url: commit['commit']['tree']['url'] }
 			end
@@ -40,41 +62,53 @@ class CrawlerWorker
 		return commits
 	end
 
-	def get_file_urls(tree_urls)
-		file_urls = []
-		tree_urls.each do |tu|
-			root = HTTParty.get("#{tu}?#{@credentials}")
-			file_urls << crawl_tree(root['tree'])
-		end
-	end
+	# def get_file_urls(tree_urls)
+	# 	puts "=======================================================================================", "getting file urls"
+	# 	file_urls = []
+	# 	tree_urls.each do |tu|
+	# 		puts "=======================================================================================", "making call to #{tu} to get file urls"
+	# 		root = HTTParty.get("#{tu}?#{@@credentials}")
+	# 		file_urls << crawl_tree(root['tree'])
+	# 	end
+	# 	return file_urls
+	# end
 
-	def crawl_tree(tree)
-		file_urls = []
-		tree.each do |object|
-			if object['type'] == "blob"
-				file_urls << object['url']
-			else
-				tree_url = object['url']
-				next_tree = HTTParty.get("#{tree_url}?#{@credentials}")
-				file_urls << crawl_tree(next_tree)
-			end
-		end
-		return file_urls
-	end
+	# def crawl_tree(tree)
+	# 	puts "=======================================================================================", "crawling a tree"
+	# 	file_urls = []
+	# 	tree.each do |object|
+	# 		puts "=======================================================================================", "#{object.class}"
+	# 		puts(tree.class, tree) if object.class == [1,2].class
+	# 		if object['type'] == "blob"
+	# 			file_urls << object['url']
+	# 		else
+	# 			tree_url = object['url']
+	# 			next_tree = HTTParty.get("#{tree_url}?#{@@credentials}")
+	# 			file_urls << crawl_tree(next_tree)
+	# 		end
+	# 	end
+	# 	return file_urls
+	# end
 
-	def get_contents(file_urls)
-		contents = []
-		file_urls.each do |url|
-			file = HTTParty.get("#{url}?#{@credentials}")
-			contents << decode(file['content'])
-		end
-	end
+	# def get_contents(file_urls)
+	# 	puts "=======================================================================================", "getting contents"
+	# 	contents = []
+	# 	file_urls.each do |url|
+	# 		file = HTTParty.get("#{url}?#{@@credentials}")
+	# 		contents << decode(file['content'])
+	# 	end
+	# end
 
 	def decode(string)
 		Base64.decode64(string)
 	end
 
+	def count_code_sins(path)
+		puts "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", "counting sins for #{path}"
+	end
+
 	def count_sins(user, strings)
+		puts "=======================================================================================", "counting sins for #{user}"
 		regex_hashes = Swearword.all.map { |sw| { id: sw.id, regex: Regexp.new("\\b#{sw.word}\\b") } }
 		regex_hashes.each do |hash|
 			strings.each do |string|
