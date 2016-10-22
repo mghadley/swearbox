@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161022001515) do
+ActiveRecord::Schema.define(version: 20161022040859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "sins", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "swearword_id"
+    t.integer  "count",        default: 0, null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["swearword_id"], name: "index_sins_on_swearword_id", using: :btree
+    t.index ["user_id"], name: "index_sins_on_user_id", using: :btree
+  end
 
   create_table "swearwords", force: :cascade do |t|
     t.string   "word"
@@ -28,4 +38,6 @@ ActiveRecord::Schema.define(version: 20161022001515) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "sins", "swearwords"
+  add_foreign_key "sins", "users"
 end

@@ -1,4 +1,5 @@
 module GithubApi
+	require 'base64'
 
 	def get_repos
 		base_uri = "https://api.github.com"
@@ -21,5 +22,9 @@ module GithubApi
 			end
 		end
 		return commits
+	end
+
+	def decode(string)
+		Base64.decode64(string)
 	end
 end
