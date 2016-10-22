@@ -23,5 +23,12 @@ module Swearbox
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+    # config.middleware.use OmniAuth::Builder do
+    #   provider :developer if Rails.env.development?
+    #   provider :github, ENV['GITHUB_CLIENT_ID'], ENV['GITHUB_CLIENT_SECRET']
+    # end
+    console do
+      ActiveRecord::Base.connection
+    end
   end
 end

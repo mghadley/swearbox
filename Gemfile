@@ -15,10 +15,14 @@ gem "github_api"
 gem 'httparty'
 gem 'multi_xml'
 gem 'sidekiq'
+gem 'omniauth'
+gem 'omniauth-github'
+gem 'slim'
 
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'pry'
+  gem 'better_errors'
 end
 
 group :development do
