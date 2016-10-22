@@ -2,7 +2,7 @@ class SessionsController < ApplicationController
 skip_before_filter :verify_authenticity_token, :only => :create
 
   def create
-    user = User.find_or_create_by(:provider => auth_hash[:provider], :uid => auth_hash[:uid], :github_username => auth_hash[:nickname]) do |user|
+    user = User.find_or_create_by(:provider => auth_hash[:provider], :uid => auth_hash[:uid]) do |user|
       user.name = auth_hash[:info][:name]
       user.github_username = auth_hash[:info][:nickname]
     end

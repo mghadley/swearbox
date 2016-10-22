@@ -10,6 +10,7 @@ gem 'coffee-rails', '~> 4.2'
 
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.5'
+gem 'bootstrap-sass'
 
 gem "github_api"
 gem 'httparty'
