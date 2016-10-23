@@ -2,33 +2,34 @@
   .grey-box.text-center
     h1.extra-large The Hall of Shame
     h3 The worst of the worst
-.black-box
-  .container
-    .sins-table
-      .row
-        .col-xs-3.table-item
-          h3 Offender
-        .col-xs-3.table-item
-          h3 Sins Commited
-        .col-xs-3.table-item
-          h3 Amount owed
-        .col-xs-3.table-item
-          h3 Paid?
-      .row
-        - @users.each do |user|
+.row
+  .black-box
+    .container
+      .sins-table
+        .row
           .col-xs-3.table-item
-            = user.github_username
+            h3 Offender
           .col-xs-3.table-item
-            = user.sins.count
+            h3 Sins Commited
           .col-xs-3.table-item
-            = user.total_owed
+            h3 Amount owed
           .col-xs-3.table-item
-            - if user.paid
-              | YES
-            - else
-              | NOPE
-      .row
-        .black-box
-          h3.text-center.large-top-margin = link_to "Return to the room of accounting", room_of_accounting_path
+            h3 Paid?
+        .row
+          - @users.each do |user|
+            .col-xs-3.table-item
+              = user.github_username
+            .col-xs-3.table-item
+              = user.sins.count
+            .col-xs-3.table-item
+              = user.total_owed
+            .col-xs-3.table-item
+              - if user.paid
+                | YES
+              - else
+                | NOPE
+        .row
+          .black-box
+            h3.text-center.large-top-margin = link_to "Return to the room of accounting", room_of_accounting_path
 
 

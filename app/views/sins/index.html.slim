@@ -1,3 +1,10 @@
+- if @paid
+	.white-box
+		.container
+			.row
+				.thankyou.text-center
+					h1 Thank you for you donation!
+					h3 = link_to "Check out the hall of shame!", hall_of_shame_path
 .row
 	.grey-box.text-center
 		h1 Welcome to the room of accounting
@@ -29,13 +36,10 @@
 			.text-center
 				h1.title-small-margin Grand Total:
 				h1 = as_currency(@grand_total)
-.white-box
-	.container
-		.row
-			- if @paid
-				.thankyou.text-center
-					h1 Thank you for you donation!
-			- else
+- unless @paid
+	.white-box
+		.container
+			.row
 				.payment.text-center
 					h2 Now it is time to put what you owe into the swear box
 					h3 What happens to the money in the swear box?
@@ -48,3 +52,5 @@
 						label.amount
 
 						script.stripe-button src="https://checkout.stripe.com/checkout.js" data-key=ENV['STRIPE_PUBLISHABLE_KEY'] data-amount=@total_charge data-name="SWEAR BOX" data-description="All payments will be donated" data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-locale="auto">
+					p.large-top-margin I suppose if you can't pay up now we'll let you proceed anyways
+					= link_to "Hall of Shame", hall_of_shame_path

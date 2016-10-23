@@ -16,7 +16,7 @@ class ChargesController < ApplicationController
 
 		unless charge.failure_code
 			current_user.update(paid: true)
-			redirect_to hall_of_shame_path
+			redirect_to room_of_accounting_path
 		end
 	rescue Stripe::CardError => e
 		flash[:error] = e.message
