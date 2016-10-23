@@ -11,6 +11,8 @@ gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.5'
 gem 'bootstrap-sass'
+gem 'bootstrap-social-rails'
+gem 'font-awesome-rails'
 
 gem "github_api"
 gem 'httparty'

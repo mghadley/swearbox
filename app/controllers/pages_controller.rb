@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_filter :ensure_logged_in, only: [:score_board, :home, :payment]
+  before_filter :ensure_logged_in, only: [:score_board, :payment]
 
   def home
   end
@@ -14,6 +14,6 @@ class PagesController < ApplicationController
   end
 
   def payment
-  	@amount = "500"
+    @amount = "500"
   end
 end

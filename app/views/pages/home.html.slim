@@ -1,1 +1,17 @@
-= link_to 'Log Out', logout_path
+header.intro
+  .intro-body
+    .container
+      .row
+        .col-md-8.col-md-offset-2
+          h1.brand-heading
+            | SWEAR BOX
+          p.intro-text
+            | PAY FOR YOUR SINS
+          br
+          = link_to :github_auth, class: 'btn btn-social btn-github' do
+            | Log in/ Sign Up
+            i class='fa fa-github'
+
+          = link_to logout_path, class: 'btn btn-github' do
+            | Sign Out
+          end
