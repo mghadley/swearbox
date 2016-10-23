@@ -32,14 +32,19 @@
 .white-box
 	.container
 		.row
-			.payment.text-center
-				h2 Now it is time to put what you owe into the swear box
-				h3 What happens to the money in the swear box?
-				h4 Well, to undo some of the damage you have done to this world, we will be donating it to a place we feel makes a difference.
-				h3 Khan Academy
-				h4 = link_to "You can learn more about them here", "https://www.khanacademy.org/about", target: "_blank"
-				h3 And then pay up
-				= form_tag charges_path do
-					label.amount
+			- if @paid
+				.thankyou.text-center
+					h1 Thank you for you donation!
+			- else
+				.payment.text-center
+					h2 Now it is time to put what you owe into the swear box
+					h3 What happens to the money in the swear box?
+					h4 Well, to undo some of the damage you have done to this world, we will be donating it to a place we feel makes a difference.
+					h3 Khan Academy
+					h4 = link_to "You can learn more about them here", "https://www.khanacademy.org/about", target: "_blank"
+					h3 And then pay up
+					p NOTE: the minimum charge we can process is $0.50
+					= form_tag charges_path do
+						label.amount
 
-					script.stripe-button src="https://checkout.stripe.com/checkout.js" data-key=ENV['STRIPE_PUBLISHABLE_KEY'] data-amount=@total_charge data-name="SWEAR BOX" data-description="All payments will be donated" data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-locale="auto">
+						script.stripe-button src="https://checkout.stripe.com/checkout.js" data-key=ENV['STRIPE_PUBLISHABLE_KEY'] data-amount=@total_charge data-name="SWEAR BOX" data-description="All payments will be donated" data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-locale="auto">

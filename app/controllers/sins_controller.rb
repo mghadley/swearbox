@@ -4,5 +4,6 @@ class SinsController < ApplicationController
   	@sins = Sin.with_totals(current_user)
   	@grand_total = (@sins.map{ |s| s[:total] }).reduce(:+)
     @total_charge = @grand_total > 50 ? @grand_total : 50
+    @paid = current_user.paid
   end
 end

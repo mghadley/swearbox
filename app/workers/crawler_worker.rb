@@ -13,12 +13,12 @@ class CrawlerWorker
 		count_sins(user, commits.flatten.map { |c| c[:message] })
 		# file_urls = get_file_urls(commits.map { |c| c.last[:tree_url] })
 		# file_contents = get_contents(file_urls)
-		repos.each do |repo|
-			path = [Rails.root, "/tmp/#{user.github_username}-#{repo[:name]}/"].join
-			`git clone #{repo[:ssh_url]} #{path}`
-			count_code_sins(user, path)
-			`rm -rf #{path}`
-		end
+		# repos.each do |repo|
+		# 	path = [Rails.root, "/tmp/#{user.github_username}-#{repo[:name]}/"].join
+		# 	`git clone #{repo[:ssh_url]} #{path}`
+		# 	count_code_sins(user, path)
+		# 	`rm -rf #{path}`
+		# end
 		user.update(crawler_done: true)
 	end
 
