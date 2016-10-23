@@ -1,0 +1,41 @@
+.container
+	.sins-table
+		.row
+			.text-center
+				h1 Welcome to the room of accounting
+				h3 Won't you have a seat?
+				h5 Below you will find an accounting of your crimes against the propriety of society. Are you ashamed? You should be.
+			.col-xs-3
+				h3 Obscenity
+			.col-xs-3
+				h3 Offenses
+			.col-xs-3
+				h3 Price per Offense
+			.col-xs-3
+				h3 Total
+		.row
+			- @sins.each do |sin|
+				.col-xs-3.table-item
+					= sin[:word]
+				.col-xs-3.table-item
+					= sin[:count]
+				.col-xs-3.table-item
+					= sin[:ppw]
+				.col-xs-3.table-item
+					= sin[:total]
+	.row
+		.text-center
+			h1.title-small-margin Grand Total:
+			h1 = @grand_total
+	.row
+		.payment.text-center
+			h2 Now it is time to put what you owe into the swear box
+			h3 What happens to the money in the swear box?
+			h4 Well, to undo some of the damage you have done to this world, we will be donating it to a place we feel makes a difference.
+			h3 Khan Academy
+			h4 = link_to "You can learn more about them here", "https://www.khanacademy.org/about", target: "_blank"
+			h3 And then pay up
+			= form_tag charges_path do
+				label.amount
+
+				script.stripe-button src="https://checkout.stripe.com/checkout.js" data-key=ENV['STRIPE_PUBLISHABLE_KEY'] data-amount=@amount data-name="SWEAR BOX" data-description="All payments will be donated" data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-locale="auto">

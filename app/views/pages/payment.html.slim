@@ -1,0 +1,5 @@
+.container style="margin-top: 400px;"
+	= form_tag charges_path do
+		label.amount
+
+		script.stripe-button src="https://checkout.stripe.com/checkout.js" data-key=ENV['STRIPE_PUBLISHABLE_KEY'] data-amount=@amount data-name="Demo Site" data-description="Widget" data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-locale="auto">

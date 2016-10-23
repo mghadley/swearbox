@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161022161736) do
+ActiveRecord::Schema.define(version: 20161023012740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 20161022161736) do
     t.string   "provider"
     t.string   "github_username"
     t.boolean  "crawler_started", default: false, null: false
+    t.boolean  "paid",            default: false, null: false
+    t.boolean  "crawler_done",    default: false, null: false
   end
 
   add_foreign_key "sins", "swearwords"
