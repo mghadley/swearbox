@@ -18,5 +18,6 @@ class User < ApplicationRecord
   def total_owed
     costs = self.sins.map { |sin| sin.total_cost }
     costs.reduce(:+)
+    costs ? costs : 0
   end
 end
