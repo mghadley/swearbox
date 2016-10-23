@@ -22,6 +22,7 @@ gem 'omniauth'
 gem 'omniauth-github'
 gem 'slim'
 gem 'stripe'
+gem 'redis'
 
 group :development, :test do
   gem 'byebug', platform: :mri
