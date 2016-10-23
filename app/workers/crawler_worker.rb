@@ -33,7 +33,7 @@ class CrawlerWorker
 			repos << { name: repo['name'], ssh_url: repo['ssh_url'] }
 		end
 		page_count = 1
-		headers_array = response.headers['link'].split","
+		headers_array = response.headers['Link'].split","
 		hash = Hash[headers_array.map { |el| el.split '; '}]
 		hash.each do |key, value|
 			if value == "rel=\"last\""

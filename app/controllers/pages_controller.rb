@@ -5,6 +5,7 @@ class PagesController < ApplicationController
   end
 
   def waiting_room
+    redirect_to room_of_accounting_path if current_user.crawler_done
   end
 
   def login

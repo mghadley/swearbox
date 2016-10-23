@@ -1,5 +1,7 @@
 class User < ApplicationRecord
-  include GithubApi
+  has_many :sins
+  has_many :swearwords, through: :sins
+
   after_save :crawl_github
 
   def crawl_github
@@ -7,5 +9,14 @@ class User < ApplicationRecord
       self.update(crawler_started: true)
       CrawlerWorker.perform_async(self.id)
     end
+  end
+
+  def self.top_ten
+    arr = User.all.sort { |x,y| x.total_owed <=> y.total_owed}
+  end
+
+  def total_owed
+    costs = self.sins.map { |sin| sin.total_cost }
+    costs.reduce(:+)
   end
 end

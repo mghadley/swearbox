@@ -1,7 +1,39 @@
-.waiting-room {
+#waiting-room {
 	margin-top: 50px;
 }
 
 .title-small-margin {
 	margin: 10px 0;
 }
+
+#please-enter {
+  margin-top: 50px;
+  display: none;
+}
+
+.bw-btn {
+  border: white 3px solid;
+  background-color: black;
+  color: white;
+  font-size: 20px;
+}
+
+.bw-btn:focus {
+  outline: none;
+  border: white 2px solid;
+  color: white;
+}
+
+// .stripe-button-el {
+//   border: black 3px solid !important;
+//   background-color: white !important;
+//   color: black !important;
+//   font-size: 20px !important;
+//   border-radius: 0 !important;
+// }
+
+// .stripe-button-el span {
+//   background-color: white !important;
+//   color: black !important;
+//   font-size: 20px !important;
+// }
