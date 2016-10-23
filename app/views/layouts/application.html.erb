@@ -6,19 +6,12 @@
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
-    <link href="https://blackrockdigital.github.io/startbootstrap-grayscale/css/grayscale.min.css" rel="stylesheet">
+    <!-- <link href="https://blackrockdigital.github.io/startbootstrap-grayscale/css/grayscale.min.css" rel="stylesheet"> -->
   </head>
 
-  <body>
+  <body class='<%= @body_class %>'>
 
     <%= yield %>
 
-    <!-- Footer -->
-    <footer>
-      <div class="container text-center">
-        <p>Copyright &copy; Swearbox 2016</p>
-      </div>
-
-    </footer>
   </body>
 </html>

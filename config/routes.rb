@@ -20,7 +20,7 @@ Rails.application.routes.draw do
 
   get 'sessions/destroy', as: 'logout'
 
-  root "pages#home"
+  root "pages#waiting_room"
 
   resources :charges
   resources :sins

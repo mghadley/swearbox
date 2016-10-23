@@ -1,7 +1,8 @@
 .row
   .container
     #waiting-room.text-center
-      h4.title-small-margin You are in
+      h4.title-small-margin
+       | You are in
       h4.title-small-margin the
       h2 WAITING ROOM
       h4.title-small-margin Please wait here while we total your vulgarities
@@ -10,3 +11,6 @@
     .text-center#please-enter
       h2 We are ready for you
       = button_to "Please, come in", room_of_accounting_path, method: :get, class: "bw-btn"
+    .sign-out-button.col-md-4.col-md-offset-5
+        = link_to :logout, class: 'btn btn-github' do
+          | Log Out
