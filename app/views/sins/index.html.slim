@@ -42,4 +42,4 @@
 				= form_tag charges_path do
 					label.amount
 
-					script.stripe-button src="https://checkout.stripe.com/checkout.js" data-key=ENV['STRIPE_PUBLISHABLE_KEY'] data-amount=@grand_total data-name="SWEAR BOX" data-description="All payments will be donated" data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-locale="auto">
+					script.stripe-button src="https://checkout.stripe.com/checkout.js" data-key=ENV['STRIPE_PUBLISHABLE_KEY'] data-amount=@total_charge data-name="SWEAR BOX" data-description="All payments will be donated" data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-locale="auto">

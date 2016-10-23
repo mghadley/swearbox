@@ -1,6 +1,6 @@
 class ChargesController < ApplicationController
 	def create
-		@amount = 500
+		@amount = current_user.total_owed > 50 ? current_user.total_owed : 50
 
 		customer = Stripe::Customer.create(
 			email: params[:stripeEmail],
