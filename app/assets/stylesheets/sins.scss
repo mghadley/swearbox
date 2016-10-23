@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .sins-table {
-	margin-bottom: 50px;
+	margin-bottom: 60px;
 }
 
 .table-item {
@@ -12,3 +12,18 @@
 	border-bottom: solid grey 1px;
 }
 
+.grey-box {
+	padding: 60px 0;
+	background-color: #6d6d6d;
+}
+
+.black-box {
+	padding: 60px 0;
+	background-color: black;
+}
+
+.white-box {
+	padding: 60px 0;
+	color: black;
+	background-color: white;
+}
