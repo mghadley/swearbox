@@ -7,7 +7,7 @@ class Sin < ApplicationRecord
   	where(user_id: user.id).each do |sin|
   		swearword = Swearword.find_by(id: sin.swearword_id)
   		ppw = swearword.price
-  		sins << { word: swearword.word.titleize, count: sin.count, ppw: ppw, total: total_cost }
+  		sins << { word: swearword.word.titleize, count: sin.count, ppw: ppw, total: sin.total_cost }
   	end
   	return sins
   end

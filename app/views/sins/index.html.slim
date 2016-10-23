@@ -22,13 +22,13 @@
 					.col-xs-3.table-item
 						= sin[:count]
 					.col-xs-3.table-item
-						= sin[:ppw]
+						= as_currency(sin[:ppw])
 					.col-xs-3.table-item
-						= sin[:total]
+						= as_currency(sin[:total])
 		.row
 			.text-center
 				h1.title-small-margin Grand Total:
-				h1 = @grand_total
+				h1 = as_currency(@grand_total)
 .white-box
 	.container
 		.row
