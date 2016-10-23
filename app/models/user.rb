@@ -12,7 +12,7 @@ class User < ApplicationRecord
   end
 
   def self.top_ten
-    arr = User.all.sort { |x,y| x.total_owed <=> y.total_owed}
+    arr = (User.all.sort { |x,y| x.total_owed <=> y.total_owed})[0..9]
   end
 
   def total_owed

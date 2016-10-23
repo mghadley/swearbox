@@ -13,12 +13,12 @@ class CrawlerWorker
 		count_sins(user, commits.flatten.map { |c| c[:message] })
 		# file_urls = get_file_urls(commits.map { |c| c.last[:tree_url] })
 		# file_contents = get_contents(file_urls)
-		# repos.each do |repo|
-		# 	path = [Rails.root, "/tmp/#{user.github_username}-#{repo[:name]}/"].join
-		# 	`git clone #{repo[:ssh_url]} #{path}`
-		# 	count_code_sins(user, path)
-		# 	`rm -rf #{path}`
-		# end
+		repos.each do |repo|
+			path = [Rails.root, "/tmp/#{user.github_username}-#{repo[:name]}/"].join
+			`git clone #{repo[:clone_url]} #{path}`
+			count_code_sins(user, path)
+			`rm -rf #{path}`
+		end
 		user.update(crawler_done: true)
 	end
 
@@ -30,21 +30,23 @@ class CrawlerWorker
 		response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}")
 		puts "=======================================================================================", "got repos"
 		response.each do |repo|
-			repos << { name: repo['name'], ssh_url: repo['ssh_url'] }
+			repos << { name: repo['name'], clone_url: repo['clone_url'] }
 		end
-		page_count = 1
-		headers_array = response.headers['Link'].split","
-		hash = Hash[headers_array.map { |el| el.split '; '}]
-		hash.each do |key, value|
-			if value == "rel=\"last\""
-				page_count = (key.match(/page=(\d+).*$/)[1]).to_i
+		if response.headers['Link']
+			page_count = 1
+			headers_array = response.headers['Link'].split","
+			hash = Hash[headers_array.map { |el| el.split '; '}]
+			hash.each do |key, value|
+				if value == "rel=\"last\""
+					page_count = (key.match(/page=(\d+).*$/)[1]).to_i
+				end
 			end
-		end
-		if page_count > 1
-			(2..page_count).each do |i|
-				paginated_response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}&page=#{i}")
-				paginated_response.each do |repo|
-					repos << { name: repo['name'], ssh_url: repo['ssh_url'] }
+			if page_count > 1
+				(2..page_count).each do |i|
+					paginated_response = HTTParty.get("#{@@base_uri}/users/#{username}/repos?#{@@credentials}&page=#{i}")
+					paginated_response.each do |repo|
+						repos << { name: repo['name'], clone_url: repo['clone_url'] }
+					end
 				end
 			end
 		end
@@ -72,7 +74,10 @@ class CrawlerWorker
 			puts "=======================================================================================", "making call to #{@@base_uri}/repos/#{username}/#{repo}/commits?#{@@credentials} to get commits for repo"
 			response = HTTParty.get("#{@@base_uri}/repos/#{username}/#{repo}/commits?#{@@credentials}")
 			response.each do |commit|
-				repo_commits << { message: commit['commit']['message'], tree_url: commit['commit']['tree']['url'] }
+				# repo_commits << { message: commit['commit']['message'], tree_url: commit['commit']['tree']['url'] }
+				unless commit.class == [1,2].class
+					repo_commits << { message: commit['commit']['message'], tree_url: 'not currently used' }
+				end
 			end
 			commits << repo_commits
 		end
