@@ -1,5 +1,19 @@
+.login {
+  background: image-url('swearbox_black.jpg')no-repeat center center fixed;
+  background-color: black;
+  background-size: 75% 75%;
+  opacity: 5.0
+}
+
+.waiting-room {
+  background-color: black;
+  background-size: 75% 75%;
+  opacity: 5.0
+}
+
 #waiting-room {
 	margin-top: 50px;
+  color: #949494;
 }
 
 .title-small-margin {
@@ -26,6 +40,22 @@
   outline: none;
   border: white 2px solid;
   color: white;
+}
+
+.sign-in-button {
+  position: absolute;
+  left: 50%;
+  width: 100px;
+  margin-left: -50px;
+  bottom:0px;
+}
+
+.sign-out-button {
+  position: absolute;
+  left: 50%;
+  width: 100px;
+  margin-left: -50px;
+  bottom:0px;
 }
 
 // .stripe-button-el {
