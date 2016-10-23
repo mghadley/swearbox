@@ -4,7 +4,7 @@ class SinsController < ApplicationController
   	@sins = Sin.with_totals(current_user)
     redirect_to no_sins_path and return unless @sins.any?
   	@grand_total = (@sins.map{ |s| s[:total] }).reduce(:+)
-    @total_charge = @grand_total > 50 ? @grand_total : 50
+    @total_charge = 51
     @paid = current_user.paid
   end
 

@@ -1,12 +1,9 @@
 Rails.application.routes.draw do
-  get 'users/index'
-
   get 'sins/index'
 
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
-  get 'pages/score_board'
   get 'pages/payment'
   get 'login', to: 'pages#login'
   get 'waiting_room', to: 'pages#waiting_room'
