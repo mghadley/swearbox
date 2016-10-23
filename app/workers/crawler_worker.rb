@@ -19,6 +19,7 @@ class CrawlerWorker
 			count_code_sins(user, path)
 			`rm -rf #{path}`
 		end
+		user.update(crawler_done: true)
 	end
 
 	private

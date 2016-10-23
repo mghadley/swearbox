@@ -8,12 +8,12 @@ skip_before_filter :verify_authenticity_token, :only => :create
     end
 
     session[:user_id] = user.id
-    redirect_to :pages_score_board, notice: "Signed in successfully!"
+    redirect_to waiting_room_path, notice: "Signed in successfully!"
   end
 
   def destroy
     reset_session
-    redirect_to :root, notice: "Signed out"
+    redirect_to login_path, notice: "Signed out"
   end
 
   private

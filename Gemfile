@@ -19,6 +19,7 @@ gem 'sidekiq'
 gem 'omniauth'
 gem 'omniauth-github'
 gem 'slim'
+gem 'stripe'
 
 group :development, :test do
   gem 'byebug', platform: :mri
