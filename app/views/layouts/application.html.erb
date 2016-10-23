@@ -8,7 +8,19 @@
     <%= javascript_include_tag 'application' %>
     <!-- <link href="https://blackrockdigital.github.io/startbootstrap-grayscale/css/grayscale.min.css" rel="stylesheet"> -->
   </head>
-
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <% if current_user.present? %>
+          <li><%= link_to 'Log Out', :logout %></li>
+        <% else %>  
+          <li><%= link_to 'Log In / Sign Up With Github', :github_auth %></li> 
+        <% end %>
+      </ul>
+    </div>
+  </nav>
   <body class='<%= @body_class %>'>
 
     <%= yield %>
