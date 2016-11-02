@@ -20,9 +20,9 @@
             .col-xs-3.table-item
               = user.github_username
             .col-xs-3.table-item
-              = user.sins.count
+              = user.total_sins
             .col-xs-3.table-item
-              = user.total_owed
+              = as_currency(user.total_owed)
             .col-xs-3.table-item
               - if user.paid
                 | YES

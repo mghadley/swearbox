@@ -15,6 +15,10 @@ class User < ApplicationRecord
     arr = (User.all.sort { |x,y| y.total_owed <=> x.total_owed})[0..9]
   end
 
+  def total_sins
+    sins.pluck(:count).reduce(:+)
+  end
+
   def total_owed
     costs = self.sins.map { |sin| sin.total_cost }
     final_costs = costs.reduce(:+)
