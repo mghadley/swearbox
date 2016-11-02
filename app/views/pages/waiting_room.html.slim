@@ -8,10 +8,7 @@
       h4.title-small-margin Please wait here while we total your vulgarities
       h5.title-small-margin It could take a while
       h6.title-small-margin Get comfortable
-      h6.title-small-margin We are checking your GitHub for Swearword
+      h6.title-small-margin We are checking your code and commits in GitHub for swearwords
     .text-center#please-enter
       h2 We are ready for you
       = button_to "Please, come in", room_of_accounting_path, method: :get, class: "bw-btn"
-    .sign-out-button.col-md-4.col-md-offset-5
-        = link_to :logout, class: 'btn btn-github' do
-          | Log Out

@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   get 'sessions/destroy', as: 'logout'
 
+  put 'recrawl', to: 'users#recrawl'
+
   root "pages#waiting_room"
 
   resources :charges

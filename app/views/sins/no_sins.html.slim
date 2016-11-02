@@ -6,3 +6,5 @@
         h2 Guess you're not the heathen we thought you were
         h3 Want to see how sinful everyone else is?
         h3 = link_to "The Hall of Shame", hall_of_shame_path
+        h3 Want to double check?
+        = button_to "Rescan", recrawl_path, method: :put, class: "btn btn-bw"

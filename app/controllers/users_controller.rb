@@ -5,6 +5,13 @@ class UsersController < ApplicationController
   def show
   end
 
+  def recrawl
+    current_user.sins.delete_all
+    current_user.update(crawler_started: true, crawler_done: false)
+    CrawlerWorker.perform_async(current_user.id)
+    redirect_to waiting_room_path
+  end
+
   def check_crawler
     render json: current_user.crawler_done
   end

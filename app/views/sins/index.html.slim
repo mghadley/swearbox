@@ -36,6 +36,9 @@
 			.text-center
 				h1.title-small-margin Grand Total:
 				h1 = as_currency(@grand_total)
+		.text-center
+			h3 Cleaned your act up? Committed more sins?
+			= button_to "Rescan", recrawl_path, method: :put, class: "bw-btn"
 - unless @paid
 	.white-box
 		.container
