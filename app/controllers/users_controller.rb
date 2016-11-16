@@ -7,13 +7,17 @@ class UsersController < ApplicationController
 
   def recrawl
     current_user.sins.delete_all
-    current_user.update(crawler_started: true, crawler_done: false)
+    current_user.update(crawler_done: false)
     CrawlerWorker.perform_async(current_user.id)
     redirect_to waiting_room_path
   end
 
   def check_crawler
-    render json: current_user.crawler_done
+    if current_user.crawler_done
+      render json: true
+    else
+      render json: current_user.sins
+    end
   end
 
   def hall_of_shame

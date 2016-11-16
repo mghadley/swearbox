@@ -129,7 +129,7 @@ class CrawlerWorker
 		puts "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", "counting sins for #{path}"
 		Swearword.all.each do |sw|
 			count = (`egrep -irI "\\b#{sw.word}\\b" #{path} | wc -l`).to_i
-			puts("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", "There are #{count} #{sw.word}") if count > 0
+			puts("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", "Found #{count} #{sw.word}") if count > 0
 			if count > 0
 				sin = Sin.find_or_initialize_by(user_id: user.id, swearword_id: sw.id)
 				sin.count += count
